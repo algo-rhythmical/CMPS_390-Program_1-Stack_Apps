@@ -40,8 +40,27 @@ public class Operation {
 
         for(int i = 0; i < ex.length(); i++) {
             c = ex.charAt(i);
+
             if(c == '(') {
-                while (ex.charAt(i+1) != ')') {
+                if(ex.charAt(i+1) == '(') {
+                    i++;
+                    while (ex.charAt(i + 1) != ')') {
+                        i++;
+                        c = ex.charAt(i);
+                        if (c >= '0' && c <= '9')
+                            post.push(c);
+                        else if (c == '+' || c == '-' || c == '*' || c == '/')
+                            op.push(c);
+                    }
+                    i++;
+                    if (!op.isStackEmpty()) {
+                        myOp = op.pop('c');
+                        post.push(myOp);
+                    }
+                    c = ')';
+                }
+
+                while (ex.charAt(i + 1) != ')') {
                     i++;
                     c = ex.charAt(i);
                     if (c >= '0' && c <= '9')
@@ -114,4 +133,6 @@ public class Operation {
         answer = nStack.pop(1);
         return answer;
     }
+
+
 }

@@ -11,41 +11,35 @@ public class Operation {
     }
 
     public boolean validate(String ex) {
-        boolean isGood = true;
-        CharStack cStack = new CharStack();
+        boolean isValid = true;
+        Stack cStack = new Stack('c');
         char c;
-
         for(int i = 0; i < ex.length(); i++) {
             c = ex.charAt(i);
             System.out.print(c);
-
             if(c == '(') {
                 cStack.push(c);
             }
             else if(c == ')'){
                 if(cStack.isStackEmpty())
-                    isGood = false;
+                    isValid = false;
                 else
-                    cStack.pop();
+                    cStack.pop('c');
             }
         }
-
         if(!cStack.isStackEmpty())
-            isGood = false;
-
-        return isGood;
+            isValid = false;
+        return isValid;
     }
 
     public String translate(String ex) {
-        CharStack post = new CharStack();
-        CharStack op = new CharStack();
+        Stack post = new Stack('c');
+        Stack op = new Stack('c');
         char c, myOp;
         String transString ="";
-        int postsize = ex.length();
 
         for(int i = 0; i < ex.length(); i++) {
             c = ex.charAt(i);
-
             if(c == '(') {
                 while (ex.charAt(i+1) != ')') {
                     i++;
@@ -57,7 +51,7 @@ public class Operation {
                 }
                 i++;
                 if (!op.isStackEmpty()) {
-                    myOp = op.pop();
+                    myOp = op.pop('c');
                     post.push(myOp);
                 }
                 c = ')';
@@ -67,7 +61,7 @@ public class Operation {
                 post.push(c);
 
             if (!op.isStackEmpty()) {
-                myOp = op.pop();
+                myOp = op.pop('c');
                 post.push(myOp);
             }
 
@@ -75,26 +69,24 @@ public class Operation {
                 op.push(c);
 
             if (c == ')' && !op.isStackEmpty()) {
-                myOp = op.pop();
+                myOp = op.pop('c');
                 post.push(c);
             }
         }
-
         System.out.print("Translated expression is: ");
         for(int i = 0; i <= post.top; i++) {
-            transString += post.s[i];
-            System.out.print(post.s[i]);
+            transString += post.chStack[i];
+            System.out.print(post.chStack[i]);
         }
         System.out.println();
         return transString;
     }
 
     public double evaluate(String ex) {
-        DoubleStack nStack = new DoubleStack();
+        Stack nStack = new Stack(1);
         char c;
         double number, x, y, z = 0;
         double answer;
-
         for(int i = 0; i < ex.length(); i++) {
             c = ex.charAt(i);
             if(c >= '0' && c <= '9' ) {
@@ -102,8 +94,8 @@ public class Operation {
                 nStack.push(number);
             }
             else{
-                y = nStack.pop();
-                x = nStack.pop();
+                y = nStack.pop(1);
+                x = nStack.pop(1);
                 if(c == '+') {
                     z = x + y;
                 }
@@ -119,7 +111,7 @@ public class Operation {
                 nStack.push(z);
             }
         }
-        answer = nStack.pop();
+        answer = nStack.pop(1);
         return answer;
     }
 }

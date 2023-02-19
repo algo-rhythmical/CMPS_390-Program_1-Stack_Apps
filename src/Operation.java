@@ -1,16 +1,31 @@
-public class Operation {
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-    Operation (String expr) {
-        boolean isValid = validate(expr);
-        if (isValid) {
-            System.out.println(" : Validation complete");
-            String transExp = translate(expr);
-            System.out.println("Value after evaluating expression is " + evaluate(transExp) +"\n");
-        }else
-            System.out.println(" : Invalid parenthesis!"+ "\n");
+public class Operation {
+    public static void main(String[] args) {
+        try {
+            boolean isValid;
+            String expr="";
+
+            Scanner scan = new Scanner(new File("src//Infixes"));
+            while (scan.hasNextLine()) {
+                expr = (scan.nextLine());
+                isValid = validate(expr);
+                if (isValid) {
+                    System.out.println(" : Validation complete");
+                    String transExp = translate(expr);
+                    System.out.println("Value after evaluating expression is " + evaluate(transExp) +"\n");
+                }else
+                    System.out.println(" : Invalid parenthesis!"+ "\n");
+            }
+        }
+        catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
     }
 
-    public boolean validate(String ex) {
+    public static boolean validate(String ex) {
         boolean isValid = true;
         Stack cStack = new Stack('c');
         char c;
@@ -32,7 +47,7 @@ public class Operation {
         return isValid;
     }
 
-    public String translate(String ex) {
+    public static String translate(String ex) {
         Stack post = new Stack('c');
         Stack op = new Stack('c');
         char c, myOp;
@@ -42,6 +57,7 @@ public class Operation {
             c = ex.charAt(i);
 
             if(c == '(') {
+
                 if(ex.charAt(i+1) == '(') {
                     i++;
                     while (ex.charAt(i + 1) != ')') {
@@ -101,7 +117,7 @@ public class Operation {
         return transString;
     }
 
-    public double evaluate(String ex) {
+    public static double evaluate(String ex) {
         Stack nStack = new Stack(1);
         char c;
         double number, x, y, z = 0;
@@ -133,6 +149,4 @@ public class Operation {
         answer = nStack.pop(1);
         return answer;
     }
-
-
 }

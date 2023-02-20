@@ -1,29 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 public class Operation {
-    public static void main(String[] args) {
-        try {
-            boolean isValid;
-            String expr="";
-
-            Scanner scan = new Scanner(new File("src//Infixes"));
-            while (scan.hasNextLine()) {
-                expr = (scan.nextLine());
-                isValid = validate(expr);
-                if (isValid) {
-                    System.out.println(" : Validation complete");
-                    String transExp = translate(expr);
-                    System.out.println("Value after evaluating expression is " + evaluate(transExp) +"\n");
-                }else
-                    System.out.println(" : Invalid parenthesis!"+ "\n");
-            }
-        }
-        catch (FileNotFoundException e) {
-            System.out.println(e);
-        }
-    }
 
     public static boolean validate(String ex) {
         boolean isValid = true;
@@ -58,7 +33,7 @@ public class Operation {
 
             if(c == '(') {
 
-                if(ex.charAt(i+1) == '(') {
+                while(ex.charAt(i+1) == '(') {
                     i++;
                     while (ex.charAt(i + 1) != ')') {
                         i++;
@@ -75,7 +50,6 @@ public class Operation {
                     }
                     c = ')';
                 }
-
                 while (ex.charAt(i + 1) != ')') {
                     i++;
                     c = ex.charAt(i);
@@ -125,7 +99,7 @@ public class Operation {
         for(int i = 0; i < ex.length(); i++) {
             c = ex.charAt(i);
             if(c >= '0' && c <= '9' ) {
-                number = (int)c - 48.0;
+                number = (double)c - 48.0;
                 nStack.push(number);
             }
             else{
